@@ -28,13 +28,8 @@ public class TokenController {
 	
 	@PostMapping("/generate")
 	public Integer generateToken(String service) throws ServiceNotFoundException{
-		Integer token = null;
-		if(bankService.isValidService(service)) {
-			 token = tokenService.generateToken(service);}
-		else{
-			throw new ServiceNotFoundException("Service Not Found with the name: "+service);
-		}
-		return token;
+		
+		return tokenService.generateToken(service);
 	}
 	
 }

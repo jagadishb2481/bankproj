@@ -12,5 +12,6 @@ import bank.model.Token;
 @Repository
 public interface ReviewRepository extends JpaRepository<Review,Integer> {
    
+	List<Review> findByService(String service);
 	
 }

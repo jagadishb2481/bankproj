@@ -10,6 +10,7 @@ import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import bank.exception.ServiceNotFoundException;
 import bank.model.Review;
 import bank.model.Token;
 import bank.repository.ReviewRepository;
@@ -24,17 +25,40 @@ public class ReviewService {
 	
 	@Autowired
 	TokenRepository tokenRepository;
+	
+	@Autowired
+	BankService bankService;
+	
 
-	public Review createReview(Review review) {
+	public Review createReview(Review review) throws ServiceNotFoundException {
 		// TODO Auto-generated method stub
 		
-		review = reviewRepository.save(review);
+		Token token = review.getToken();
+		if(null!=review && null!=token && null!= token.getStatus() && token.getStatus().equals(Constants.completed_status) && 
+				null!=review.getRating() && bankService.isValidService(review.getService())) {
+			review = reviewRepository.save(review);}
+		else{
+			throw new ServiceNotFoundException("Invalid Request: "+review.toString());
+		}
+		
+		
 		return review;
 	}
-	
-	
-	
-	
 
+	public Double getAvgRatingByService(String service) throws ServiceNotFoundException {
+		// TODO Auto-generated method stub
+		Double average = null;
+		if(bankService.isValidService(service)){
+			List<Review> reviewList = reviewRepository.findByService(service);
+			if(reviewList!=null && reviewList.size()>0) {
+				average = reviewList.stream().mapToDouble(x-> x.getRating()).average().getAsDouble();
+			}
+		}else{
+			throw new ServiceNotFoundException("Service Not Found with the name: "+service);
+		}
+		
+		return average;
+	}
+	
 	
 }

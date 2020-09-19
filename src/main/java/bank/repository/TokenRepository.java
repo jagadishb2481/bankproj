@@ -11,7 +11,7 @@ import bank.model.Token;
 @Repository
 public interface TokenRepository extends JpaRepository<Token,Integer> {
    
-	
+	List<Token> findByIdLessThan(Integer id);
 	List<Token> findByStatusOrderById(String status);
 	List<Token> findByService(String service);
 }

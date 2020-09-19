@@ -1,6 +1,7 @@
 package bank.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,6 +40,13 @@ public class ReviewController {
 			throw new ServiceNotFoundException("Invalid Request: "+token.toString());
 		}
 		return review;
+	}
+	
+	
+	@GetMapping("avgRatingByService")
+	public Double getAvgRatingByService(@RequestParam("Service") String service) throws ServiceNotFoundException {
+		
+		return reviewService.getAvgRatingByService(service);
 	}
 	
 }

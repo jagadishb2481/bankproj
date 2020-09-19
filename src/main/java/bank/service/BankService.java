@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import bank.exception.ServiceNotFoundException;
 import bank.model.Token;
 import bank.repository.TokenRepository;
 import bank.utls.Constants;
@@ -54,9 +56,8 @@ public class BankService {
 			
 		});
 		//LinkedHashMap<String, List<Token>> tokensByService = TokenRepository.findB 
-		services.forEach(x->{
-		 
-		});
+		
+		
 		
 		tokensByService.entrySet().parallelStream().forEach(x->{
 			System.out.println("FulfilledService");
@@ -69,6 +70,36 @@ public class BankService {
 		
 		return "SUCCESS";
 	}
+
+	public String fulFillServiceByToken(Integer tokenId) throws ServiceNotFoundException {
+		// TODO Auto-generated method stub
+		if(null!=tokenId) {
+			Token token = tokenRepository.findById(tokenId).get();
+			if(validate(token)) {
+				token.setStatus(Constants.completed_status);
+				tokenRepository.save(token);
+			}
+					
+		}else {
+			throw  new ServiceNotFoundException("Token should not be null");
+		}
+		return "SUCCESS";
+	}
+
+	private boolean validate(Token token) throws ServiceNotFoundException {
+		// TODO Auto-generated method stub
+		
+		if(null==token) {
+			throw  new ServiceNotFoundException("Token not found ");
+		}
+		if(null!=token.getStatus() && token.getStatus().equals(Constants.pending_status)) {
+			List<Token> tokens = tokenRepository.findByIdLessThan(token.getId());
+			boolean found = tokens.stream().allMatch(x-> x.getStatus().equals(Constants.completed_status));
+			return found;
+		}
+		return false;
+	}
+	
 	
 	
 
