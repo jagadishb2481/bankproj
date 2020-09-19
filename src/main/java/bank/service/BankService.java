@@ -75,7 +75,7 @@ public class BankService {
 		// TODO Auto-generated method stub
 		if(null!=tokenId) {
 			Token token = tokenRepository.findById(tokenId).get();
-			if(validate(token)) {
+			if(null!=token && validate(token)) {
 				token.setStatus(Constants.completed_status);
 				tokenRepository.save(token);
 			}
@@ -94,7 +94,9 @@ public class BankService {
 		}
 		if(null!=token.getStatus() && token.getStatus().equals(Constants.pending_status)) {
 			List<Token> tokens = tokenRepository.findByIdLessThan(token.getId());
-			boolean found = tokens.stream().allMatch(x-> x.getStatus().equals(Constants.completed_status));
+			
+			boolean found = tokens.stream().filter(x-> x.getService().equals(token.getService()))
+					.allMatch(x-> x.getStatus().equals(Constants.completed_status));
 			return found;
 		}
 		return false;

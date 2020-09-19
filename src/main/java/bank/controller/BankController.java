@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import bank.exception.ServiceNotFoundException;
 import bank.service.BankService;
 
 @RestController
@@ -24,9 +25,7 @@ public class BankController {
 	}
 	
 	@PostMapping("fulFillServiceByToken")
-	public String fulFillServiceByToken(@RequestParam("token") Integer tokenId) {
-		
-		
+	public String fulFillServiceByToken(@RequestParam("token") Integer tokenId) throws ServiceNotFoundException {
 		return bankService.fulFillServiceByToken(tokenId);
 	}
 	
