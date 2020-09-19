@@ -2,6 +2,7 @@ package bank.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,6 +26,7 @@ public class TokenController {
 		return "Hello world";
 	}
 	
+	@PostMapping("/generate")
 	public Integer generateToken(String service) throws ServiceNotFoundException{
 		Integer token = null;
 		if(bankService.isValidService(service)) {

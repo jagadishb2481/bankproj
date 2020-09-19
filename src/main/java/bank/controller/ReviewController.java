@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import bank.exception.ServiceNotFoundException;
 import bank.model.Review;
+import bank.model.Token;
 import bank.service.BankService;
 import bank.service.ReviewService;
 import bank.service.TokenService;
+import bank.utls.Constants;
 
 @RestController
 @RequestMapping("review/")
@@ -29,10 +31,12 @@ public class ReviewController {
 	@PostMapping("create")
 	public Review createReview(@RequestBody Review review) throws ServiceNotFoundException {
 		
-		if(null!=review && null!= review.getService() && null!=review.getRating() && bankService.isValidService(review.getService())) {
+		Token token = review.getToken();
+		if(null!=review && null!=token && null!= token.getStatus() && token.getStatus().equals(Constants.completed_status) && 
+				null!=review.getRating() && bankService.isValidService(review.getService())) {
 			review  = reviewService.createReview(review);}
 		else{
-			throw new ServiceNotFoundException("Invalid Request: "+review.toString());
+			throw new ServiceNotFoundException("Invalid Request: "+token.toString());
 		}
 		return review;
 	}
