@@ -1,5 +1,7 @@
 package bank.controller;
 
+import javax.validation.constraints.NotNull;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,7 +27,7 @@ public class BankController {
 	}
 	
 	@PostMapping("fulFillServiceByToken")
-	public String fulFillServiceByToken(@RequestParam("token") Integer tokenId) throws ServiceNotFoundException {
+	public String fulFillServiceByToken(@RequestParam("token") @NotNull Integer tokenId) throws ServiceNotFoundException {
 		return bankService.fulFillServiceByToken(tokenId);
 	}
 	

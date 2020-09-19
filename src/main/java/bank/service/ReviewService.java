@@ -34,6 +34,7 @@ public class ReviewService {
 		// TODO Auto-generated method stub
 		
 		Token token = review.getToken();
+		
 		if(null!=review && null!=token && null!= token.getStatus() && token.getStatus().equals(Constants.completed_status) && 
 				null!=review.getRating() && bankService.isValidService(review.getService())) {
 			review = reviewRepository.save(review);}

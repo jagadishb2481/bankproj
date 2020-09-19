@@ -75,9 +75,13 @@ public class BankService {
 		// TODO Auto-generated method stub
 		if(null!=tokenId) {
 			Token token = tokenRepository.findById(tokenId).get();
-			if(null!=token && validate(token)) {
+			if(null!=token ) {
+				if(validate(token)) {
 				token.setStatus(Constants.completed_status);
 				tokenRepository.save(token);
+				}
+			}else {
+				throw new ServiceNotFoundException("Token not found with id: "+tokenId);
 			}
 					
 		}else {
